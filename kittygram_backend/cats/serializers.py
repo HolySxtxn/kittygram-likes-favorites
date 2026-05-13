@@ -43,7 +43,6 @@ class CatSerializer(serializers.ModelSerializer):
     age = serializers.SerializerMethodField()
     image = Base64ImageField(required=False, allow_null=True)
     
-    # ↓↓↓ ДОБАВЬ ЭТИ ДВА ПОЛЯ ↓↓↓
     is_liked = serializers.SerializerMethodField()
     is_favorited = serializers.SerializerMethodField()
 
@@ -51,14 +50,13 @@ class CatSerializer(serializers.ModelSerializer):
         model = Cat
         fields = (
             'id', 'name', 'color', 'birth_year', 'achievements', 'owner', 'age',
-            'image', 'is_liked', 'is_favorited'  # ← ДОБАВЬ is_liked, is_favorited
+            'image', 'is_liked', 'is_favorited' 
         )
         read_only_fields = ('owner',)
 
     def get_age(self, obj):
         return dt.datetime.now().year - obj.birth_year
 
-    # ↓↓↓ ДОБАВЬ ЭТИ ДВА МЕТОДА ↓↓↓
     def get_is_liked(self, obj):
         request = self.context.get('request')
         if request and request.user.is_authenticated:

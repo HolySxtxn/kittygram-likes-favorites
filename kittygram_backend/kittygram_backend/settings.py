@@ -1,13 +1,14 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv() 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-cg6*%6d51ef8f#4!r3*$vmxm4)abgjw8mo!4y-q*uq1!4$-89$'
-
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-cg6*%6d51ef8f#4!r3*$vmxm4)abgjw8mo!4y-q*uq1!4$-89$')
 DEBUG = True
-
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'backend']
+# DEBUG = os.getenv('DEBUG', 'False') == 'True'
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,backend').split(',')
 
 INSTALLED_APPS = [
     'corsheaders',
@@ -114,9 +115,12 @@ USE_L10N = True
 
 USE_TZ = True
 
-STATICFILES_DIRS = []
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static') 
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]   
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')             
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -130,9 +134,10 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
-    # 'UNAUTHENTICATED_USER': None,
+    
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
 
+print(f"DEBUG from env: {os.getenv('DEBUG')}")
